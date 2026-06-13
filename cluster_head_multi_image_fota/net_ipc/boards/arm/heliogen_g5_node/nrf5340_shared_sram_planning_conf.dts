@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2022 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+ */
+
+/* Default shared SRAM planning when building for nRF5340.
+ * This file is included by both nRF5340 CPUAPP (Application MCU)
+ * and nRF5340 CPUNET (Network MCU).
+ * - 64 kB SRAM allocated as Shared memory (sram0_shared)
+ * - Region defined after the image SRAM of Application MCU
+ */
+
+/ {
+	chosen {
+		/* shared memory reserved for the inter-processor communication */
+		zephyr,ipc_shm = &sram0_shared;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		/*
+		 * nRF5340 shared SRAM planning
+		 *
+		 * 0x20070000..0x2007FFFF is the CPUAPP SRAM window that is accessible by
+		 * both cores.
+		 *
+		 * The stock Zephyr/NCS configuration typically uses the whole 64 KiB as a
+		 * single shared region (sram0_shared) for OpenAMP/static-vrings and
+		 * Bluetooth HCI IPC.
+		 *
+		 * For custom inter-core messaging (ICMsg backend) we carve out a small
+		 * slice at the *top* of the shared SRAM window and leave the remainder as
+		 * sram0_shared so existing OpenAMP users can still work (as long as the
+		 * reduced size is sufficient for their configuration).
+		 */
+		sram0_shared: memory@20070000 {
+			/* SRAM allocated to shared memory for OpenAMP/static-vrings */
+			// reg = <0x20070000 0x0E000>; /* 56 KiB */
+			reg = <0x20070000 0x0E800>; /* 58 KiB */
+		};
+
+		// /* Dedicated shared SRAM regions for ICMsg (2 x 4 KiB) */
+		// sram0_icmsg_tx: memory@2007e000 {
+		// 	reg = <0x2007E000 0x1000>;
+		// };
+		// sram0_icmsg_rx: memory@2007f000 {
+		// 	reg = <0x2007F000 0x1000>;
+		// };
+
+		/* Dedicated shared SRAM regions for ICMsg (2 x 3 KiB) */
+		sram0_icmsg_tx: memory@2007e000 {
+			reg = <0x2007E000 0xC00>;
+		};
+		sram0_icmsg_rx: memory@2007f000 {
+			reg = <0x2007F000 0xC00>;
+		};
+};

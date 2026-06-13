@@ -1,0 +1,14 @@
+LB 10/2/23 Config v2.0.+ Tampa Bay
+fs write "cfg.json" "{\"gen_cfg\":{\"v\":\"0.2\"},\"wifi_cfg\":{\"ssid\":\"G5-Heliostat-AP-5GHz_1\",\"psk\":\"mphGQ9s7G9pz\",\"mqtt_hn\":\"10.20.20.71\"},"
+fs append "cfg.json" "\"motor_cfg\":{\"is_tb_motor\":true,\"step_period_us\":18000,\"cur_lim_cnts\":775,\"back_emf_pid\":{\"k_p\":\"40.0\",\"k_i\":\"30.0\",\"k_d\":\"10.0\"},"
+fs append "cfg.json" "\"cur_lim_pid\":{\"k_p\":\"2.5\",\"k_i\":\"1.5\",\"k_d\":\"0.0\"}},\"manager_cfg\":{\"trd_mon_en\":false,\"wifi_to_ms\":0,\"mqtt_to_ms\":0},\"accel_cfg\":{\"temp_offset\":\"23.8\"}}"
+
+HEM motors:
+fs write "cfg.json" "{\"gen_cfg\":{\"v\":\"0.2\"},\"wifi_cfg\":{\"ssid\":\"G5-Heliostat-AP-5GHz\",\"psk\":\"mphGQ9s7G9pz\",\"mqtt_hn\":\"10.20.20.71\"},"
+fs append "cfg.json" "\"motor_cfg\":{\"is_tb_motor\":false,\"step_period_us\":18000,\"cur_lim_cnts\":775,\"back_emf_pid\":{\"k_p\":\"40.0\",\"k_i\":\"30.0\",\"k_d\":\"10.0\"},"
+fs append "cfg.json" "\"cur_lim_pid\":{\"k_p\":\"4.5\",\"k_i\":\"2.0\",\"k_d\":\"0.0\"}},\"manager_cfg\":{\"trd_mon_en\":false,\"wifi_to_ms\":0,\"mqtt_to_ms\":0},\"accel_cfg\":{\"temp_offset\":\"23.8\"}}"
+
+FOR Node:
+fs write "cfg.json" "{\"gen_cfg\":{\"v\":\"1.1\"},\"wifi_cfg\":{\"ssid\":\"Heliostat\",\"psk\":\"PistachioSnorkel555\",\"mqtt_hn\":\"192.168.1.4\"},"
+fs append "cfg.json" "\"pwr_cfg\":{\"is_prod_unit\":false,\"batt_mv_wifi_off\":3000,\"batt_mv_wifi_on\":3100,\"pv_mv_wifi_off\":1000,\"pv_mv_wifi_on\":1250},"
+fs append "cfg.json" "\"manager_cfg\":{\"trd_mon_en\":true,\"wifi_to_ms\":10800000,\"mqtt_to_ms\":10800000},\"accel_cfg\":{\"temp_offset\":\"23.8\"}}"

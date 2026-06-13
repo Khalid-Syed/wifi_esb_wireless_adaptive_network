@@ -1,0 +1,12 @@
+identifier: heliogen_g5_node_nrf5340_cpunet
+name: HELIOGEN-G5-NODE-NRF5340-network-MCU
+type: mcu
+arch: arm
+toolchain:
+  - gnuarmemb
+  - xtools
+  - zephyr
+ram: 64
+flash: 256
+supported:
+  - watchdog

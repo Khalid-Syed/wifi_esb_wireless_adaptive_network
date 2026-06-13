@@ -1,0 +1,7 @@
+# # Give this child-image a module name used by the build_strategy template.
+# module = EMPTY_NET_CORE
+
+# # This template provides the *_BUILD_STRATEGY_* symbols and enables PM support
+# source "${ZEPHYR_BASE}/../nrf/subsys/partition_manager/Kconfig.template.build_strategy"
+
+# source "Kconfig.zephyr"

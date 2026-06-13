@@ -1,0 +1,4 @@
+name: g5_node_ipc_child_images
+build:
+  cmake: aci
+  # kconfig: Kconfig

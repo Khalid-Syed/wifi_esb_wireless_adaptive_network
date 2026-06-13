@@ -1,0 +1,581 @@
+#
+# Copyright (c) 2022 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+source "Kconfig.zephyr"
+
+# menu "G5 node multi-image"
+
+# This symbol is often hidden (no prompt) in NCS, but Nordic has shown you can
+# add a prompt/default here so you can force it off in prj.conf.
+# config NCS_SAMPLE_EMPTY_NET_CORE_CHILD_IMAGE
+# 	bool "Build default empty network core child image"
+# 	default n
+
+# config G5_NODE_INCLUDE_NET_IPC_CHILD_IMAGE
+# 	bool "Build net_ipc as CPUNET child image"
+# 	default y
+# 	depends on SOC_NRF5340_CPUAPP
+
+# endmenu
+
+config HELIOGEN_CONFIG_FILE_CONFIG
+	string "Init file pointer"
+	default "cfg_file.txt"
+	help
+	  Specify the file that points the initial configuration
+
+config HELIOGEN_CONFIG_FILE_DEFAULT
+	string "Default config file"
+	default "cfg.json"
+	help
+	  Specify the file that contains the initial configuration
+
+menu "Heliogen g5nrf"
+config USB_DEVICE_PID
+	hex
+	default 0x1DAD
+
+config USB_DEVICE_VID
+	hex
+	default 0xB0DD
+	
+config HELIOGEN_SSID_24GHZ
+	string "SSID 2.4GHz"
+	help
+	  Specify the 2.4GHz SSID to connect
+
+config HELIOGEN_SSID_5GHZ
+	string "SSID 5GHz"
+	help
+	  Specify the 5GHz SSID to connect
+
+config HELIOGEN_PASSWORD
+	string "Passphrase (WPA2) or password (WPA3)"
+	help
+	  Specify the Password to connect - leave blank for Open Security
+
+config HELOGEN_WIFI_BOOT_DELAY
+	int "Seconds to wait after boot before connecting to wifi"
+	default 15
+	help
+	  Specify how long to wait after boot before connecting to wifi
+
+config HELIOGEN_PASSWORD
+	string "Passphrase (WPA2) or password (WPA3)"
+	help
+	  Specify the Password to connect
+
+config HELIOGEN_QSPI_ENCRYPTION_KEY
+	string "16 bytes QSPI encryption key, only for testing purposes"
+	help
+	  Specify the QSPI encryption key
+
+endmenu
+
+menu "App Version"
+
+config APP_VERSION_MAJOR
+	int "Major version number"
+	default 0
+
+config APP_VERSION_MINOR
+	int "Minor version number"
+	default 0
+
+config APP_VERSION_PATCH
+	int "Patch version number"
+	default 0
+
+config APP_VERSION_COMMIT
+	int "Commit version number"
+	default 0
+
+config APP_VERSION_HASH
+	string "Version hash provided by Git"
+	default ""
+
+config APP_VERSION
+	string "Full version"
+	default ""
+
+endmenu # App version
+
+menuconfig MQTT_HELPER_HELIOGEN
+	bool "'Heliogen MQTT helper library"
+	select NET_SOCKETS_POSIX_NAMES if !POSIX_API
+	select MQTT_LIB
+	help
+	  Convenience library that simplifies Zephyr MQTT API and socket handling.
+
+if MQTT_HELPER_HELIOGEN
+
+config MQTT_HELPER_HELIOGEN_NATIVE_TLS
+	bool "Native TLS socket"
+	help
+	  Enabling this option will configure the socket to be native for TLS
+	  instead of offloading TLS operations to the device's networking stack.
+
+config MQTT_HELPER_HELIOGEN_PORT
+	int "MQTT broker port"
+	default 8883 if MQTT_LIB_TLS
+	default 1883
+	help
+	  Port number to connect to the MQTT broker.
+
+config MQTT_HELPER_HELIOGEN_SEC_TAG
+	int "TLS sec tag"
+	depends on MQTT_LIB_TLS
+	default -1
+	help
+	  Security tag where TLS credentials are stored.
+
+config MQTT_HELPER_HELIOGEN_SEND_TIMEOUT
+	bool "Send data with socket timeout"
+	default y
+	help
+	  Configures a timeout on the MQTT socket to ensure that a call to the send
+	  function will not block indefinitely. To configure the length of the timeout,
+	  use MQTT_HELPER_HELIOGEN_SEND_TIMEOUT_SEC.
+
+config MQTT_HELPER_HELIOGEN_SEND_TIMEOUT_SEC
+	int "Send timeout"
+	depends on MQTT_HELPER_HELIOGEN_SEND_TIMEOUT
+	default 60
+	help
+	  Timeout in seconds to use when the MQTT socket is configured to
+	  send with a timeout by enabling MQTT_HELPER_HELIOGEN_SEND_TIMEOUT.
+
+config MQTT_HELPER_HELIOGEN_STATIC_IP_ADDRESS
+	string "Static IP address"
+	help
+	  Set a static IP address to use when connecting to the MQTT broker.
+	  Leave the string empty to use DNS to resolve the IoT Hub hostname instead.
+
+config MQTT_HELPER_HELIOGEN_SECONDARY_SEC_TAG
+	int "Secondary TLS sec tag"
+	default -1
+	help
+	  Security tag where TLS credentials are stored.
+	  The secondary tag can be used to store for instance an additional server certificate.
+	  -1 indicates that the secondary sec tag is not used.
+
+config MQTT_HELPER_HELIOGEN_STACK_SIZE
+	int "Connection thread stack size"
+	default 2560
+	help
+	  The stack size of the internal thread in the library.
+	  The thread polls the MQTT socket while it's open.
+	  All MQTT-related callbacks happen in context of this thread, so the stack size may have
+	  to be adjusted for your needs.
+
+config MQTT_HELPER_HELIOGEN_RX_TX_BUFFER_SIZE
+	int "Buffer sizes for the MQTT library"
+	default 256
+	help
+	  Specifies maximum message size can be transmitted/received through
+	  MQTT (exluding MQTT PUBLISH payload).
+
+config MQTT_HELPER_HELIOGEN_PAYLOAD_BUFFER_LEN
+	int "Size of the MQTT PUBLISH payload buffer (receiving MQTT messages)"
+	default 2048 if NRF_MODEM_LIB
+	default 4096
+
+config MQTT_HELPER_HELIOGEN_PROVISION_CERTIFICATES
+	bool "Run-time provisioning of certificates"
+	depends on (BOARD_QEMU_X86 || BOARD_NATIVE_POSIX || BOARD_NRF7002DK_NRF5340_CPUAPP) && MQTT_LIB_TLS
+	default y
+	imply MBEDTLS_PEM_CERTIFICATE_FORMAT if MBEDTLS
+	help
+	  Enable run-time provisioning of certificates from the
+	  certificates header file selected by using MQTT_HELPER_HELIOGEN_CERTIFICATES_FILE
+	  This option is only available for emulation build targets,
+	  such as QEMU x86 or Native Posix.
+	  This option is only intended for testing and should not be used in a production scenario.
+	  Enabling this option means that the credentials used in the TLS communication towards the
+	  server will be exposed in flash memory.
+
+config MQTT_HELPER_HELIOGEN_CERTIFICATES_FILE
+	string "TLS certificates"
+	depends on MQTT_HELPER_HELIOGEN_PROVISION_CERTIFICATES
+	default "../cert/mqtt-certs.h"
+	help
+	  The default path for a header file that contains definitions for certificates that are
+	  used during run-time provisioning of TLS credentials.
+	  By default, the library expects the credentials to be in
+	  Privacy Enhanced Mail (PEM) format. See "mqtt-certs.h" for a template.
+
+module = MQTT_HELPER_HELIOGEN
+module-str = MQTT helper library
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # MQTT_HELPER_HELIOGEN
+menu "Transport"
+	depends on MQTT_HELPER_HELIOGEN
+	depends on HW_ID_LIBRARY
+
+config MQTT_TRANSPORT_THREAD_PRIORITY
+	depends on MQTT_HELPER_HELIOGEN
+	int "Thread priority"
+	default 3
+	help
+	  Priority of the module's internal thread.
+
+config MQTT_TOPIC_STRING_MAX_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "topic maximum string size"
+	default 64
+	help
+	  Maximum size of the mqtt topic string.
+
+config MQTT_PAYLOAD_STRING_MAX_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "Payload maximum string size"
+	default 2048
+	help
+	  Maximum size of the string included messages that are sent over the payload channel.
+
+config MQTT_TRANSPORT_RECONNECTION_TIMEOUT_SECONDS
+	depends on MQTT_HELPER_HELIOGEN
+	int "Reconnection timeout in seconds"
+	default 60
+	help
+	  Time in between reconnection attempts to the MQTT broker.
+
+config MQTT_TRANSPORT_RESUBSCRIPTION_TIMEOUT_SECONDS
+	depends on MQTT_HELPER_HELIOGEN
+	int "Resubscription timeout in seconds"
+	default 60
+	help
+	  Time in between reconnection attempts to the MQTT broker.
+
+config MQTT_TRANSPORT_THREAD_STACK_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "Thread stack size"
+	default 4096
+
+config MQTT_TRANSPORT_MESSAGE_QUEUE_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "Message queue size"
+	default 20
+	help
+	  ZBus subscriber message queue size.
+
+config TRANSPORT_MSGQ_LEN
+		depends on MQTT_HELPER_HELIOGEN
+		int "transport queue size"
+		default 50
+		help
+		  Fw transport queue size.
+
+config MQTT_TRANSPORT_WORKQUEUE_STACK_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "Workqueue stack size"
+	default 4096
+	help
+	  Stack size of the module's internal workqueue.
+
+config MQTT_TRANSPORT_BROKER_HOSTNAME
+	depends on MQTT_HELPER_HELIOGEN
+	string "MQTT broker hostname"
+	default "test.mosquitto.org"
+
+config MQTT_TRANSPORT_CLIENT_ID
+	depends on MQTT_HELPER_HELIOGEN
+	string "MQTT Client ID"
+	default ""
+	help
+	  Use a custom client ID string. If not set, the client ID will default to the mac address
+		of the Nordic 7002 chip.
+	  
+config MQTT_TRANSPORT_CLIENT_ID_BUFFER_SIZE
+	depends on MQTT_HELPER_HELIOGEN
+	int "MQTT Client ID buffer size"
+	default 50
+	help
+	  Size of buffer used to store the MQTT client ID.
+
+config MQTT_TRANSPORT_PUBLISH_TOPIC
+	depends on MQTT_HELPER_HELIOGEN
+	string "MQTT publish topic"
+	default "my/publish/topic"
+
+config MQTT_TRANSPORT_SUBSCRIBE_TOPIC
+	depends on MQTT_HELPER_HELIOGEN
+	string "MQTT subscribe topic"
+	default "my/subscribe/topic"
+
+module = MQTT_TRANSPORT
+module-str = Transport
+source "subsys/logging/Kconfig.template.log_config"
+
+config TWT_ANNOUNCED_MODE
+	bool "Enable announced mode"
+	help
+	  STA announces its wakeup to AP for every service period start.
+
+config TWT_WAKE_INTERVAL
+	int "TWT awake interval"
+	help
+	  The period where STA is awake and does data transfer, interval should be in us.
+	default 65000
+
+config TWT_INTERVAL
+	int "TWT service interval"
+	help
+	  The period for TWT that includes both wake and sleep durations, interval should be in us.
+	  Please note higher intervals can be rejected by AP or cause interoperability issues.
+	default 524000
+
+config COEX_ENABLE
+	bool "Control if coexistence HW is enable"
+	default y
+
+config COEX_SEP_ANTENNAS
+	bool "Control if the antennas are shared/serparate for BT and WLAN"
+	default y
+
+config COEX_BT_CENTRAL
+	bool "BT device role"
+	default y
+
+endmenu # Transport
+
+config LED_THREAD
+	bool "Run LED thread"
+	default true
+
+config POWER_THREAD
+	bool "Run power mgmt thread"
+	default true
+	
+###############################################################
+# Logging
+###############################################################
+
+# leverage the KConfig logging system template to configure the log levels
+# for Heliogen modules.  The overlay-logging.conf file can be used to set the log levels
+#menu "Heliogen Log Levels"
+module = MAIN
+module-str = main
+source "subsys/logging/Kconfig.template.log_config"
+
+module = FS
+module-str = fs
+source "subsys/logging/Kconfig.template.log_config"
+
+module = STORAGE
+module-str = storage
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CFG
+module-str = cfg
+source "subsys/logging/Kconfig.template.log_config"
+
+module = WIFI_THREAD
+module-str = wifi_thread
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MQTT_COMMON
+module-str = mqtt_common
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MANAGER_THREAD
+module-str = manager
+source "subsys/logging/Kconfig.template.log_config"
+
+module = LED_THREAD
+module-str = led
+source "subsys/logging/Kconfig.template.log_config"
+
+module = POWER_THREAD
+module-str = power
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MCUMGR
+module-str = mcu_manager
+source "subsys/logging/Kconfig.template.log_config"
+
+module = HTTP_UPDATE
+module-str = http_update
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CFG_JSON
+module-str = cfg_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = REBOOT_JSON
+module-str = reboot_json
+source "subsys/logging/Kconfig.template.log_config"
+
+# Sadman's edit
+module = RTT_JSON
+module-str = rtt_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CONTROL_JSON
+module-str = control_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = START_JSON
+module-str = start_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = NODE_ID_JSON
+module-str = node_id_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = STATUS_JSON
+module-str = status_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = OTA_DFU_JSON
+module-str = ota_dfu_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = SYS_PUB_JSON
+module-str = sys_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = FS_SUB_JSON
+module-str = fs_sub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MPPT_PUB_JSON
+module-str = mppt_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MQTT_COMMON
+module-str = mqtt_common
+source "subsys/logging/Kconfig.template.log_config"
+
+module = REBOOT_MQTT
+module-str = reboot_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+# Sadman's edit
+module = RTT_MQTT
+module-str = rtt_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CONTROL_MQTT
+module-str = control_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = START_MQTT
+module-str = start_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = NODE_ID_MQTT
+module-str = node_id_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = STATUS_MQTT
+module-str = status_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = MPPT_PUB_MQTT
+module-str = mppt_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = OTA_DFU_MQTT
+module-str = ota_dfu_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = RESET_CAUSE
+module-str = reset_cause
+source "subsys/logging/Kconfig.template.log_config"
+
+module = SYS_WDT
+module-str = sys_wdt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = FS_SUB_MQTT
+module-str = fs_sub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = TEMPLATE_PUB_MQTT
+module-str = template_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = TEMPLATE_SUB_MQTT
+module-str = template_sub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = LED_PATTERNS
+module-str = led_patterns
+source "subsys/logging/Kconfig.template.log_config"
+
+module = SYS
+module-str = sys
+source "subsys/logging/Kconfig.template.log_config"
+
+module = SYS_PUB_MQTT
+module-str = sys_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = TRANSPORT_QUEUE
+module-str = transport_queue
+source "subsys/logging/Kconfig.template.log_config"
+
+module = WIFI_EVENTS
+module-str = wifi_events
+source "subsys/logging/Kconfig.template.log_config"
+
+module = TRANSPORT_EVENTS
+module-str = transport_events
+source "subsys/logging/Kconfig.template.log_config"
+
+module = WIFI_STATS_PUB_MQTT
+module-str = wifi_stats_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = WIFI_STATS_PUB_JSON
+module-str = wifi_stats_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = WIFI_STATS
+module-str = wifi_stats
+source "subsys/logging/Kconfig.template.log_config"
+
+# Sadman's edit
+module = NCLA_PUB_MQTT
+module-str = ncla_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = NCLA_PUB_JSON
+module-str = ncla_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = NCLA
+module-str = ncla
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CLA_PUB_MQTT
+module-str = cla_pub_mqtt
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CLA_PUB_JSON
+module-str = cla_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = CLA
+module-str = cla
+source "subsys/logging/Kconfig.template.log_config"
+
+module = PUBS
+module-str = pubs
+source "subsys/logging/Kconfig.template.log_config"
+
+module = REMOTE_PUB_JSON
+module-str = remote_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+module = REMOTE_PUB_MQTT
+module-str = remote_pub_json
+source "subsys/logging/Kconfig.template.log_config"
+
+
+#endmenu

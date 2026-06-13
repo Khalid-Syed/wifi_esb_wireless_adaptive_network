@@ -1,0 +1,29 @@
+#include <autoconf.h>
+
+# app:
+#   address: 0x1000000
+#   end_address: 0x1040000
+#   orig_span: &id001
+#   - empty_net_core
+#   region: flash_primary
+#   size: 0x40000
+#   span: *id001
+# empty_net_core:
+#   address: 0x1000000
+#   end_address: 0x1040000
+#   region: flash_primary
+#   size: 0x40000
+# sram_primary:
+#   address: 0x21000000
+#   end_address: 0x21010000
+#   region: sram_primary
+#   size: 0x10000
+
+empty_net_core:
+  size: 0x40000
+  placement:
+    after: app
+cpunet_b0n_container:
+  address: 0x1040000
+  region: flash_primary
+  size: 0x1000 # Minimal size (4KB)

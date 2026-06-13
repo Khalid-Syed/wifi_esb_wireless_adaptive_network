@@ -1,0 +1,33 @@
+{
+    "gen_cfg": {
+        "v": "life_cycle_0.10"
+    },
+    "motor_cfg": {
+        "is_tb_motor": true,
+        "step_period_us": 18000,
+        "cur_lim_cnts": 775,
+        "back_emf_pid": {
+            "k_p": "40.0",
+            "k_i": "30.0",
+            "k_d": "10.0"
+        },
+        "cur_lim_pid": {
+            "k_p": "2.5",
+            "k_i": "1.5",
+            "k_d": "0.0"
+        }
+    },
+    "wifi_cfg": {
+        "ssid": "G5-Heliostat-AP-5GHz",
+        "psk": "mphGQ9s7G9pz",
+        "mqtt_hn": "10.20.20.71"
+    },
+    "manager_cfg": {
+        "trd_mon_en": false,
+        "wifi_to_ms": 0,
+        "mqtt_to_ms": 0
+    },
+    "accel_cfg": {
+        "temp_offset": "18.4"
+    }
+}

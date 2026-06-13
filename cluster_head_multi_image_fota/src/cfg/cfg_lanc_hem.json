@@ -1,0 +1,33 @@
+{
+    "gen_cfg": {
+        "v": "lanc_dvt1"
+    },
+    "motor_cfg": {
+        "is_tb_motor": false,
+        "step_period_us": 18000,
+        "cur_lim_cnts": 775,
+        "back_emf_pid": {
+            "k_p": "20.0",
+            "k_i": "8.0",
+            "k_d": "5.0"
+        },
+        "cur_lim_pid": {
+            "k_p": "4.5",
+            "k_i": "2.0",
+            "k_d": "0.0"
+        }
+    },
+    "wifi_cfg": {
+        "ssid": "G5-Heliostat-AP",
+        "psk": "mphGQ9s7G9pz",
+        "mqtt_hn": "10.16.0.22"
+    },
+    "manager_cfg": {
+        "trd_mon_en": false,
+        "wifi_to_ms": 0,
+        "mqtt_to_ms": 0
+    },
+    "accel_cfg": {
+        "temp_offset": "22.3"
+    }
+}

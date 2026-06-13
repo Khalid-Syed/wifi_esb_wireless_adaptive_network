@@ -1,0 +1,20 @@
+TODOS:
+
+TODO: [G5FW-125] understand MCUBoot options - failover extra_kconfig_options
+TODO: [G5FW-126] OTA HTTP client should be more forgiving and able to resume.
+TODO: [G5FW-127] OTA download client to be stateful and retry if OTA fails
+TODO: [G5FW-129] OTA uses TLS connection
+TODO: [G5FW-130] OTA able to dowload from AWS or other external server
+TODO: [G5FW-131] document in config files what each option does and why we set it that way.
+TODO: [G5FW-132] add semantic versioning to app and mcu boot
+TODO: [G5FW-134] ablitiy to turn on UDP logging via mqtt topic
+TODO: [G5FW-135] BUG: fw seems to freeze for some reason EVT3 MPPT branch
+TODO: [G5FW-136] add ADC readings and conversion of new ADC signals EVT3 board  
+TODO: [G5FW-137] remote config file managment - ability to control and download config file - use mqtt and http
+TODO: Why is reverting back to old version?  MCU Boot?
+TODO: is watchdog even turned on?
+TODO: can the DHCP client be more aggressive?  see DHCPv4.c
+TODO: mqtt ping - see mqtt.C
+TODO: [G5FW-139] better semantic versioning from build process and git checkin sha
+TODO: [G5FW-140] assert_post_action - if the uptime is less than a certain amount of time, we could tell MCUBoot to roll back
+TODO: [G5FW-141] assert_post_action - if the device is rebooting over and over, it would be good to not wear our flash out

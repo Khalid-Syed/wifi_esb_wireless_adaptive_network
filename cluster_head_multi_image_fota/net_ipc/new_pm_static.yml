@@ -1,0 +1,28 @@
+# Partition configuration for the Network Core (CPUNET)
+# This file must be compatible with the parent's pm_static.yml
+
+# app:
+#   address: 0x1000000
+#   region: flash_primary
+#   size: 0x40000 # Reduced from 0x40000 to leave a gap for the Partition Manager
+
+
+# b0n_container:
+#   address: 0x0103F000  # Placed at the end of the primary flash, just before the B0n partition
+#   region: flash_primary
+#   size: 0x1000 # Minimal size (4KB)
+
+# b0n:
+#   address: 0x0103E000
+#   region: flash_primary
+#   size: 0x1000 # Minimal size (4KB)
+
+# provision:
+#   address: 0x0103ED80
+#   region: flash_primary
+#   size: 0x280 # Minimal size (0.625KB)
+
+b0n_container:
+  address: 0x103F000  # (example, must fit in 256kB region)
+  region: flash_primary
+  size: 0x1000

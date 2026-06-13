@@ -1,0 +1,18 @@
+# nRF5340 DK NRF5340 board configuration
+
+# Copyright (c) 2022 Nordic Semiconductor ASA
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+
+if SOC_NRF5340_CPUAPP_QKAA
+
+config BOARD_HELIOGEN_G5_NODE_CPUAPP
+	bool "heliogen_g5_node nRF5340 Application MCU"
+
+config BOARD_HELIOGEN_G5_NODE_CPUAPP_NS
+	bool "heliogen_g5_node nRF5340 Application MCU non-secure"
+
+endif # SOC_NRF5340_CPUAPP_QKAA
+
+config BOARD_HELIOGEN_G5_NODE_CPUNET
+	bool "heliogen_g5_node NRF5340 Network MCU"
+	depends on SOC_NRF5340_CPUNET_QKAA

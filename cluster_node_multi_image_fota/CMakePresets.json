@@ -1,0 +1,51 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20
+    },
+    "configurePresets": [
+        {
+            "name": "build-wifi",
+            "displayName": "Build for HELIOGEN G5 R2 NRF5340 application MCU",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-wifi",
+            "cacheVariables": {
+                "NCS_TOOLCHAIN_VERSION": "NONE",
+                "BOARD": "heliogen_g5_r2_nrf5340_cpuapp",
+                "BOARD_ROOT": "${sourceDir}/",
+                "DTC_OVERLAY_FILE": "${sourceDir}/boards/heliogen_g5_r2_nrf5340_cpuapp.overlay",
+                "CONF_FILE": "${sourceDir}/prj.conf",
+                "OVERLAY_CONFIG": "${sourceDir}/overlay-wifi-config.conf;${sourceDir}/overlay-logging.conf;${sourceDir}/overlay_release.conf;${sourceDir}/conf/version.conf"
+            }
+        },
+        {
+            "name": "build-node",
+            "displayName": "Build for HELIOGEN G5 NODE NRF5340 application MCU",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-node",
+            "cacheVariables": {
+                "NCS_TOOLCHAIN_VERSION": "NONE",
+                "BOARD": "heliogen_g5_node_nrf5340_cpuapp",
+                "BOARD_ROOT": "${sourceDir}/",
+                "DTC_OVERLAY_FILE": "${sourceDir}/boards/heliogen_g5_node_nrf5340_cpuapp.overlay",
+                "CONF_FILE": "${sourceDir}/prj.conf",
+                "OVERLAY_CONFIG": "${sourceDir}/overlay-wifi-config.conf;${sourceDir}/overlay-logging.conf;${sourceDir}/overlay_release.conf;${sourceDir}/conf/version.conf"
+            }
+        },
+        {
+            "name": "build-debug",
+            "displayName": "Build for HELIOGEN G5 R2 NRF5340 application MCU",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-wifi",
+            "cacheVariables": {
+                "NCS_TOOLCHAIN_VERSION": "NONE",
+                "BOARD": "heliogen_g5_r2_nrf5340_cpuapp",
+                "BOARD_ROOT": "${sourceDir}/",
+                "DTC_OVERLAY_FILE": "${sourceDir}/boards/heliogen_g5_r2_nrf5340_cpuapp.overlay",
+                "CONF_FILE": "${sourceDir}/prj.conf",
+                "OVERLAY_CONFIG": "${sourceDir}/overlay-wifi-config.conf;${sourceDir}/overlay-logging.conf;${sourceDir}/overlay_debug.conf;${sourceDir}/conf/version.conf"
+            }
+        }
+    ]
+}

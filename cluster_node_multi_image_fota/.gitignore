@@ -1,0 +1,10 @@
+# editors
+*.swp
+*~
+
+# build
+/build*/
+/monday*/
+/*.code-workspace
+
+*/version.conf

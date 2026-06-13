@@ -1,0 +1,65 @@
+/{
+	aliases {
+		spiflash0 = &mx25r64;
+		led0= &led0;
+	};
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
+			label = "User LED 0";
+		};
+	};
+
+};
+
+/ {
+	chosen {
+		//zephyr,shell-uart = &cdc_acm_uart0;
+		nordic,pm-ext-flash = &mx25r64;
+	};
+};
+&spi4 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&spi4_default>;
+	pinctrl-1 = <&spi4_sleep>;
+	pinctrl-names = "default", "sleep";
+	cs-gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
+
+
+	mx25r64: mx25r6435f@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <33000000>;
+		jedec-id = [ c2 28 17  ];
+		sfdp-bfp = [ e5 20 f1 ff ff ff ff 03 44 eb 08 6b 08 3b 04 bb ee ff ff ff ff ff 00 ff ff ff 00 ff 0c 20 0f 52 10 d8 00 ff 23 72 f5 00 82 ed 04 cc 44 83 68 44 30 b0 30 b0 f7 c4 d5 5c 00 be 29 ff f0 d0 ff ff  ];
+		size = <67108864>;
+		has-dpd;
+		t-enter-dpd = <10000>;
+		t-exit-dpd = <5000>;
+
+		partitions{
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			lfs1_part: partition@0 {
+				label = "lfs1";
+				reg = <0x00000000 0x00040000>;
+			};
+		};
+
+	};
+};
+
+/*
+&zephyr_udc0 {
+	cdc_acm_uart0: cdc_acm_uart0 {
+		compatible = "zephyr,cdc-acm-uart";
+	};
+};
+ */
+
+ &uicr {
+    nfct-pins-as-gpios;
+};
