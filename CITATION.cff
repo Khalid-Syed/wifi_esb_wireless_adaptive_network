@@ -8,8 +8,14 @@ message: >-
   your research or product, please cite this repository
 type: software
 authors:
-  - given-names: Khalid Azeez
-    family-names: Syed
+  - family-names: "Syed"
+    given-names: "Khalid"
+  - family-names: "Siraj"
+    given-names: "Md Sadman"
+  - family-names: "Rahman"
+    given-names: "Aisha B"
+  - family-names: "Tsiropoulou"
+    given-names: "Eirini Eleni"
 repository-code: >-
   https://github.com/Khalid-Syed/wifi_esb_wireless_adaptive_network
 abstract: >-
