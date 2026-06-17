@@ -1,0 +1,35 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Wi-Fi Shockburst Network
+message: >-
+  If you use this network architecture or its components in
+  your research or product, please cite this repository
+type: software
+authors:
+  - given-names: Khalid Azeez
+    family-names: Syed
+repository-code: >-
+  https://github.com/Khalid-Syed/wifi_esb_wireless_adaptive_network
+abstract: >-
+  This novel network architecture utilizes Wi-Fi's long
+  range with Enhanced Shockburst's (ESB)'s lightweight radio
+  based protocol to provide an end-to-end low latency and
+  energy efficient
+
+  communication architecture that improves scalability and
+  coverage without excessive infrastructure deployment
+keywords:
+  - Wi-Fi
+  - Enhanced Shockburst
+  - ESB
+  - scalable
+  - low latency
+  - energy efficient
+  - Industrial Internet of Things
+  - IIoT
+  - Internet of Things
+  - IoT
+version: 1.0.0
+date-released: '2026-04-20'
