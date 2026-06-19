@@ -17,15 +17,13 @@ The Cluster Head acts as a bridge or gateway. It maintains a persistent or semi-
 - **ESB Coordination**: Manages a local cluster of nodes.
 - **Dual-Core IPC**: Utilizes Inter-Processor Communication (IPC) to separate the application logic (Application Core) from the networking stack (Network Core).
 
-# Cluster Head Firmware Detailed Documentation (including how to build and flash instructions):
-👉 **[Click here to read the Cluster Head Guide (README - CH.md)](cluster_head_multi_image_fota/README%20-%20CH.md)**
+👉 **[Click here to read the Cluster Head Guide (README.md)](cluster_head_multi_image_fota/README.md) (includes build and flash instructions)**
 
 ### 2. Cluster Node (`cluster_node_multi_image_fota/`)
 The Cluster Nodes represent edge devices or sensors. They utilize ultra-low power ESB to connect back to the Cluster Head rather than using Wi-Fi directly, drastically improving battery life.
 - **ESB Communication**: Aggregates and sends sensor data reliably to the Cluster Head.
 
-# Cluster Node Firmware Detailed Documentation (including how to build and flash instructions):
-👉 **[Click here to read the Cluster Node Guide (README - CH.md)](cluster_node_multi_image_fota/README%20-%20CN.md)**
+👉 **[Click here to read the Cluster Node Guide (README.md)](cluster_node_multi_image_fota/README.md) (includes build and flash instructions)**
 
 ### Features
 - **Multi-Image Firmware Over-The-Air (FOTA)** support for updating both application and network core firmware securely.
