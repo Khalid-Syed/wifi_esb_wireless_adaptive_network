@@ -64,6 +64,8 @@ The dataset consists of `rtt_results.csv` files generated during the tests. Key 
 
 These datasets are invaluable for statistical analysis regarding latency bounds, throughput limits, and ESB-to-Wi-Fi gateway reliability.
 
+👉 **[Detailed documentation regarding packet and messaging format used in this architecture](data/README.md)**
+
 <!--
 ## Getting Started
 
