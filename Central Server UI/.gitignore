@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Virtual env
+.venv/
+venv/
+ENV/
+
+# PyInstaller output
+build/
+dist/
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+logs/

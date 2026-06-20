@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proton-testbed-gui"
+version = "1.1.0"
+description = "PROTON Testbed GUI + central server for MQTT-based wireless nodes"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Md Sadman Siraj", email = "msiraj13@asu.edu" }
+]
+license = { text = "Proprietary / internal" }
+dependencies = [
+  "PyQt5>=5.15",
+  "paho-mqtt>=1.6",
+]
+
+[project.scripts]
+proton-testbed = "proton_testbed_gui.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

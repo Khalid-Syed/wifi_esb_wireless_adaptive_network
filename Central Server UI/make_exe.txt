@@ -1,0 +1,2 @@
+OLD: pyinstaller --onefile --noconsole --paths=src --icon=assets/image.ico proton_testbed.py
+python -m PyInstaller --onefile --noconsole --paths=src --icon=assets/image.ico --add-data "assets;assets" proton_testbed.py
